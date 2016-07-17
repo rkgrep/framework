@@ -4,10 +4,13 @@ namespace Illuminate\Config;
 
 use ArrayAccess;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Traits\ImplementsArrayAccess;
 use Illuminate\Contracts\Config\Repository as ConfigContract;
 
 class Repository implements ArrayAccess, ConfigContract
 {
+    use ImplementsArrayAccess;
+
     /**
      * All of the configuration items.
      *
@@ -56,7 +59,7 @@ class Repository implements ArrayAccess, ConfigContract
      * @param  mixed   $value
      * @return void
      */
-    public function set($key, $value = null)
+    public function set($key, $value)
     {
         if (is_array($key)) {
             foreach ($key as $innerKey => $innerValue) {
@@ -65,6 +68,17 @@ class Repository implements ArrayAccess, ConfigContract
         } else {
             Arr::set($this->items, $key, $value);
         }
+    }
+
+    /**
+     * Unset a given configuration value.
+     *
+     * @param  array|string  $key
+     * @return void
+     */
+    public function forget($key)
+    {
+        $this->set($key, null);
     }
 
     /**
@@ -107,50 +121,5 @@ class Repository implements ArrayAccess, ConfigContract
     public function all()
     {
         return $this->items;
-    }
-
-    /**
-     * Determine if the given configuration option exists.
-     *
-     * @param  string  $key
-     * @return bool
-     */
-    public function offsetExists($key)
-    {
-        return $this->has($key);
-    }
-
-    /**
-     * Get a configuration option.
-     *
-     * @param  string  $key
-     * @return mixed
-     */
-    public function offsetGet($key)
-    {
-        return $this->get($key);
-    }
-
-    /**
-     * Set a configuration option.
-     *
-     * @param  string  $key
-     * @param  mixed  $value
-     * @return void
-     */
-    public function offsetSet($key, $value)
-    {
-        $this->set($key, $value);
-    }
-
-    /**
-     * Unset a configuration option.
-     *
-     * @param  string  $key
-     * @return void
-     */
-    public function offsetUnset($key)
-    {
-        $this->set($key, null);
     }
 }

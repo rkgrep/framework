@@ -7,9 +7,12 @@ use ArrayIterator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Traits\ImplementsArrayAccess;
 
 abstract class AbstractPaginator implements Htmlable
 {
+    use ImplementsArrayAccess;
+
     /**
      * All of the items being paginated.
      *
@@ -505,7 +508,7 @@ abstract class AbstractPaginator implements Htmlable
      * @param  mixed  $key
      * @return bool
      */
-    public function offsetExists($key)
+    public function has($key)
     {
         return $this->items->has($key);
     }
@@ -516,7 +519,7 @@ abstract class AbstractPaginator implements Htmlable
      * @param  mixed  $key
      * @return mixed
      */
-    public function offsetGet($key)
+    public function get($key)
     {
         return $this->items->get($key);
     }
@@ -528,7 +531,7 @@ abstract class AbstractPaginator implements Htmlable
      * @param  mixed  $value
      * @return void
      */
-    public function offsetSet($key, $value)
+    public function set($key, $value)
     {
         $this->items->put($key, $value);
     }
@@ -539,7 +542,7 @@ abstract class AbstractPaginator implements Htmlable
      * @param  mixed  $key
      * @return void
      */
-    public function offsetUnset($key)
+    public function forget($key)
     {
         $this->items->forget($key);
     }

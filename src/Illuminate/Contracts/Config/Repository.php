@@ -35,7 +35,15 @@ interface Repository
      * @param  mixed   $value
      * @return void
      */
-    public function set($key, $value = null);
+    public function set($key, $value);
+
+    /**
+     * Unset a given configuration value.
+     *
+     * @param  array|string  $key
+     * @return void
+     */
+    public function forget($key);
 
     /**
      * Prepend a value onto an array configuration value.

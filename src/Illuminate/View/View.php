@@ -13,9 +13,12 @@ use Illuminate\View\Engines\EngineInterface;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\Support\MessageProvider;
 use Illuminate\Contracts\View\View as ViewContract;
+use Illuminate\Support\Traits\ImplementsArrayAccess;
 
 class View implements ArrayAccess, ViewContract
 {
+    use ImplementsArrayAccess;
+
     /**
      * The view factory instance.
      *
@@ -292,7 +295,7 @@ class View implements ArrayAccess, ViewContract
      * @param  string  $key
      * @return bool
      */
-    public function offsetExists($key)
+    public function has($key)
     {
         return array_key_exists($key, $this->data);
     }
@@ -303,7 +306,7 @@ class View implements ArrayAccess, ViewContract
      * @param  string  $key
      * @return mixed
      */
-    public function offsetGet($key)
+    public function get($key)
     {
         return $this->data[$key];
     }
@@ -315,7 +318,7 @@ class View implements ArrayAccess, ViewContract
      * @param  mixed   $value
      * @return void
      */
-    public function offsetSet($key, $value)
+    public function set($key, $value)
     {
         $this->with($key, $value);
     }
@@ -326,7 +329,7 @@ class View implements ArrayAccess, ViewContract
      * @param  string  $key
      * @return void
      */
-    public function offsetUnset($key)
+    public function forget($key)
     {
         unset($this->data[$key]);
     }

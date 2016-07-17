@@ -10,11 +10,12 @@ use BadMethodCallException;
 use Illuminate\Contracts\Cache\Store;
 use Illuminate\Support\Traits\Macroable;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Traits\ImplementsArrayAccess;
 use Illuminate\Contracts\Cache\Repository as CacheContract;
 
 class Repository implements CacheContract, ArrayAccess
 {
-    use Macroable {
+    use Macroable, ImplementsArrayAccess {
         __call as macroCall;
     }
 
@@ -434,28 +435,6 @@ class Repository implements CacheContract, ArrayAccess
     }
 
     /**
-     * Determine if a cached value exists.
-     *
-     * @param  string  $key
-     * @return bool
-     */
-    public function offsetExists($key)
-    {
-        return $this->has($key);
-    }
-
-    /**
-     * Retrieve an item from the cache by key.
-     *
-     * @param  string  $key
-     * @return mixed
-     */
-    public function offsetGet($key)
-    {
-        return $this->get($key);
-    }
-
-    /**
      * Store an item in the cache for the default time.
      *
      * @param  string  $key
@@ -465,17 +444,6 @@ class Repository implements CacheContract, ArrayAccess
     public function offsetSet($key, $value)
     {
         $this->put($key, $value, $this->default);
-    }
-
-    /**
-     * Remove an item from the cache.
-     *
-     * @param  string  $key
-     * @return void
-     */
-    public function offsetUnset($key)
-    {
-        $this->forget($key);
     }
 
     /**
